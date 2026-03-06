@@ -1,0 +1,5 @@
+# Making sure large files like flight_data is ignored as it's regenerated
+
+venv/
+
+

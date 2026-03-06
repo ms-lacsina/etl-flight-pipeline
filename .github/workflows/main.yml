@@ -1,0 +1,39 @@
+name: Run ETL Pipeline
+
+on:
+  schedule:
+    - cron: "0 7 * * *"  # 7AM GMT
+    - cron: "0 6 * * *"  # 7AM BST 
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  etl:
+    runs-on: ubuntu-latest  # Linux environments are lightweight 
+    
+    steps:
+      # Checkout the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      # Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+      
+      # Install dependencies from requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      # Ensure the 'data' folder exists in the root directory
+      - name: Create 'data' folder if it doesn't exist
+        run: |
+          mkdir -p data  # Create the 'data' folder in the root
+
+      # Run the ETL pipeline
+      - name: Run ETL pipeline
+        run: python scripts/main.py
+
+
